@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Formulario de citas</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="../css/form.css">
+  <link href="https://www.cssscript.com/demo/sticky.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="../img/favicon-clinica.jpg">
+</head>
+
+<script>
+  function cambiarArea(nuevoValor){
+    // Construct URLSearchParams object instance from current URL querystring.
+    var queryParams = new URLSearchParams(window.location.search);
+
+// Set new or modify existing parameter value.
+    queryParams.set("codArea", nuevoValor);
+    queryParams.set("codDoc", "0");
+
+    window.location.search=queryParams.toString();
+  }
+
+  function cambiarDoctor(nuevoValor){
+    // Construct URLSearchParams object instance from current URL querystring.
+    var queryParams = new URLSearchParams(window.location.search);
+
+    // Set new or modify existing parameter value.
+    queryParams.set("codDoc", nuevoValor);
+
+    window.location.search=queryParams.toString();
+  }
+
+</script>
+
+<body>
+
+<div class="center">
+  <h1 th:text="${textoTitulo}"></h1>
+  <form th:action="@{/cita/form}" th:method="post" th:object="${cita}">
+    <table>
+
+      <tr>
+        <td class="td1">Area clinica: </td>
+        <td>
+          <select th:onchange="cambiarArea(this.value)" class="select">
+            <option th:value="0">Seleccionar opcion</option>
+            <option th:each="area : ${areasClinicas}" th:value="${area.codArea}" th:text="${area.nomArea}" th:selected="${area.codArea} == ${areaCurCod}"></option>
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="td1">Doctor: </td>
+        <td>
+          <select th:field="*{doctorCodPer}" th:onchange="cambiarDoctor(this.value)" class="select">
+            <option th:value="0">Seleccionar opcion</option>
+            <option th:each="doctor : ${doctores}" th:value="${doctor.codigo}" th:text="${doctor.nombreCompleto}" th:selected="${doctor.codigo} == ${doctorCurCod}"></option>
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="td1">Fecha Cita: </td>
+        <td><input type="date" th:field="*{fecCita}"></td>
+      </tr>
+
+      <tr>
+        <td class="td1">Hora Cita: </td>
+        <td><input type="time" th:field="*{horaCita}"></td>
+      </tr>
+
+      <input type="hidden" th:field="*{idCita}">
+      <input type="hidden" th:field="*{pacienteCodPer}">
+
+      <tr>
+          <td th:class="centroSubmit" colspan="2"><input type="submit" th:value="${textoBoton}"></td>
+      </tr>
+
+    </table>
+  </form>
+</div>
+
+
+
+
+
+
+</body>
+</html>
